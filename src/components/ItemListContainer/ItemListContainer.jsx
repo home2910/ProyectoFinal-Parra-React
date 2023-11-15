@@ -39,11 +39,11 @@ export const ItemListContainer = ({ greeting }) => {
 
 
   return (
-    <>
-      <h1> {greeting} </h1>
+    <div className="flex flex-col gap-10">
+      <h1 className="mx-auto "> {greeting} </h1>
       {/* si isLoading está en true va a mostrar Cargando productos... pero cuando se pase a false va a renderizar los productos */}
       <div className="flex">
-      { isLoading ? <h2>Cargando productos ..</h2> : <ItemList products={products} /> }
+      { isLoading ? <h2 className="text-2xl font-bold">Cargando productos ..</h2> : <ItemList products={products} /> }
       </div>
-    </>
+    </div>
   )}

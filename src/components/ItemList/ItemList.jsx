@@ -3,10 +3,10 @@ import { Item } from "../Item/Item";
 export const ItemList = ({ products }) => {
   return (
     <>
-      <div className="flex-wrap d-flex">
+      <div className="grid w-screen grid-cols-4 gap-y-8">
         {products.map((product) => (
           
-          <Item key={product.id} {...product} /> ))}
+          <Item key={product.id} {...product}  /> ))}
       </div>
     </>
   );

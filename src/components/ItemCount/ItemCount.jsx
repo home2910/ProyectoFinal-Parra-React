@@ -26,7 +26,7 @@ const handleRes = () => {
         <p className="px-4 font-bold">{count}</p>
         <button className="px-4 bg-gray-400 rounded hover:bg-gray-300" onClick={handleSum}>+</button>
     </div>
-          <button className="p-1 border-2 rounded" onClick={() => onAdd(count)}>Agregar al carrito</button>
+          <button className="p-1 text-white transition-all bg-gray-400 border-2 rounded hover:bg-gray-300 hover:font-bold " onClick={() => onAdd(count)}>Agregar al carrito</button>
     </div>
   )
 }
