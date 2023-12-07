@@ -1,33 +1,31 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { getProducts } from "../../async-mocks"
-import { ItemList } from "../ItemList/ItemList"
+import { ItemList } from "./ItemList"
+
+// Firebase
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { db } from "../config/firebaseConfig"
 
 export const ItemListContainer = ({ greeting }) => {
   const { category } = useParams()
 
   const [products, setProducts] = useState([])
-  // Creamos un state que nos permite setear el estado de carga de los productos, inicializa en true
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    setIsLoading(true)
-    getProducts()
-      .then((resp) => {
-        if (category) {
-          const productsFilter = resp.filter(
-            (product) => product.category === category
-          )
+    const prodReference = collection(db, "products")
+    const qry = category
+      ? query(prodReference, where("category", "==", category))
+      : prodReference
 
-          setProducts(productsFilter)
-
-          setIsLoading(false)
-        } else {
-          setProducts(resp)
-          setIsLoading(false)
-        }
-      })
-      .catch((error) => console.log(error))
+    getDocs(qry).then((resp) => {
+      setProducts(
+        resp.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id }
+        })
+      )
+    })
+    setIsLoading(false)
   }, [category])
 
   return (
