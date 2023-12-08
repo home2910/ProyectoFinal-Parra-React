@@ -1,38 +1,40 @@
-import { useContext, useState } from "react"
-import { ItemCount } from "./ItemCount"
+import { useContext, useState } from "react";
+import { ItemCount } from "./ItemCount";
+import { CartContext } from "./context/CartContext";
 
-export const ItemDetail = ({ name, img, description, price, stock }) => {
-  const [count, setCount] = useState(1)
+export const ItemDetail = ({ product }) => {
+  const { cartList, addToCart } = useContext(CartContext);
+  console.log(cartList);
+
+  const [qty, setQty] = useState(1);
 
   const handleSum = () => {
-    count < stock && setCount(count + 1)
-  }
+    qty < product.stock && setQty(qty + 1);
+  };
 
   const handleRes = () => {
-    count > 1 && setCount(count - 1)
-  }
-
-  const onAdd = (items) => {
-    if (items > 1) {
-      alert(`Se agregaron ${items} items al carrito`)
-    } else {
-      alert("Se agregó 1 item al carrito")
-    }
-  }
+    qty > 1 && setQty(qty - 1);
+  };
 
   return (
-    <div className="flex flex-col items-center w-64 mx-auto border-2 rounded">
-      <h4 className="w-auto text-2xl font-bold">{name}</h4>
-      <img src={img} alt="Product picture" />
-      <p className="text-xl">{description}</p>
-      <p className="text-lg">Precio: {price}</p>
-      <p className="text-lg">Stock: {stock}</p>
-      <ItemCount
-        stock={stock}
-        handleSum={handleSum}
-        handleRes={handleRes}
-        count={count}
-      />
+    <div className="flex flex-col w-64 mx-auto border-2 rounded">
+      <h4 className="w-auto mx-auto text-2xl font-bold">{product.name}</h4>
+      <img src={product.img} alt="Product picture" />
+      <div className="flex flex-col justify-start bg-zinc-200">
+        <p className="mx-auto text-xl">{product.description}</p>
+        <p className="mx-auto text-lg">Precio: {product.price}</p>
+        <p className="mx-auto text-lg">Stock: {product.stock}</p>
+        <ItemCount
+          stock={product.stock}
+          l
+          handleSum={handleSum}
+          handleRes={handleRes}
+          qty={qty}
+          addToCart={() => {
+            addToCart(product, qty);
+          }}
+        />
+      </div>
     </div>
-  )
-}
+  );
+};

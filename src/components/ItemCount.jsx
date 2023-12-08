@@ -1,6 +1,6 @@
-export const ItemCount = ({ addToCart, handleRes, handleSum, count }) => {
+export const ItemCount = ({ addToCart, handleRes, handleSum, qty }) => {
   return (
-    <div className="flex flex-col items-center gap-2 w-44 ">
+    <div className="flex flex-col items-center gap-2 mx-auto w-44 ">
       <div className="flex justify-center bg-gray-500 w-44 border-3 rounded-3">
         <button
           className="px-4 bg-gray-400 rounded hover:bg-gray-300"
@@ -8,7 +8,7 @@ export const ItemCount = ({ addToCart, handleRes, handleSum, count }) => {
         >
           -
         </button>
-        <p className="px-4 font-bold">{count}</p>
+        <p className="px-4 font-bold">{qty}</p>
         <button
           className="px-4 bg-gray-400 rounded hover:bg-gray-300"
           onClick={handleSum}

@@ -17,5 +17,5 @@ export const ItemDetailContainer = () => {
       setProduct({ ...resp.data(), id: resp.id })
     )
   }, [id])
-  return <div>{product && <ItemDetail {...product} />}</div>
+  return <div>{product && <ItemDetail product={product} />}</div>
 }

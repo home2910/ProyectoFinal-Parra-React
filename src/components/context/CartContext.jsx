@@ -1,42 +1,87 @@
-import React, { createContext, useState } from "react"
+import { useState, createContext, useEffect } from "react";
+import Toastify from "toastify-js";
+import "toastify-js/src/toastify.css";
 
-export const CartContext = createContext()
+export const CartContext = createContext();
 
-const CartContextProvider = ({ children }) => {
-  const [cartList, setCartList] = useState([])
+const initialCart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const addToCart = (item, quantity) => {
-    const itemAdded = { ...item, quantity }
+export const CartContextProvider = ({ children }) => {
+  const [cartList, setCartList] = useState(initialCart);
 
-    const newCart = [...cartList]
-    const isInCart = newCart.find((product) => product.id === itemAdded.id)
+  const addToCart = (product, qty) => {
+    const itemAdded = { ...product, qty };
+
+    const newCart = [...cartList];
+    const isInCart = cartList.find((product) => product.id === itemAdded.id);
 
     if (isInCart) {
-      isInCart.quantity += quantity
-      setCartList(newCart)
+      isInCart.qty += qty;
     } else {
-      setCartList([...cartList, itemAdded])
+      newCart.push(itemAdded);
     }
-  }
+    setCartList(newCart);
+    Toastify({
+      text: "Item agregado al carrito",
+      duration: 2000,
+      destination: "https://github.com/apvarun/toastify-js",
+      newWindow: true,
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "linear-gradient(to right, #00b09b, #96c93d)",
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
+  };
 
   const calcItemsQty = () => {
-    return cartList.reduce((acc, prod) => acc + prod.quantity, 0)
-  }
+    return cartList.reduce((acc, prod) => acc + prod.qty, 0);
+  };
 
-  // Funciones no utilizadas actualmente
-  // const removeList = () => {}
-  // const deleteItem = (id) => {}
+  const totalPrice = () => {
+    return cartList.reduce((acc, prod) => acc + prod.price * prod.qty, 0);
+  };
 
-  const objProvider = {
-    addToCart,
-    // removeList,
-    // deleteItem,
-    calcItemsQty,
-  }
+  const emptyCart = () => {
+    setCartList([]);
+    Toastify({
+      text: "Carrito vaciado",
+      duration: 2000,
+      destination: "https://github.com/apvarun/toastify-js",
+      newWindow: true,
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      style: {
+        background: "red",
+      },
+      onClick: function () {}, // Callback after click
+    }).showToast();
+  };
+
+  const deleteItem = (productId) => {
+    const updatedCart = cartList.filter((product) => product.id !== productId);
+    setCartList(updatedCart);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartList));
+  }, [cartList]);
 
   return (
-    <CartContext.Provider value={objProvider}>{children}</CartContext.Provider>
-  )
-}
-
-export default CartContextProvider
+    <CartContext.Provider
+      value={{
+        cartList,
+        addToCart,
+        calcItemsQty,
+        totalPrice,
+        emptyCart,
+        deleteItem,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+};

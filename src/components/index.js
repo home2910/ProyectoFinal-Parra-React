@@ -8,4 +8,4 @@ export * from './ItemDetailContainer';
 export * from './ItemList';
 export * from './ItemListContainer';
 export { default as NavBar } from './NavBar';
-export { default as CartContext } from './context/CartContext';
+export * from './context/CartContext';

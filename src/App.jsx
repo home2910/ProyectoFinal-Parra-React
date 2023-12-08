@@ -1,12 +1,12 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import {
   Cart,
   ItemDetailContainer,
   ItemListContainer,
   NavBar,
   Checkout,
-} from "./components"
-import CartContextProvider from "./components/context/CartContext"
+  CartContextProvider,
+} from "./components";
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </CartContextProvider>
-  )
+  );
 }
 
-export default App
+export default App;

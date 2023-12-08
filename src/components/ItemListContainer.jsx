@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { ItemList } from "./ItemList"
+import { useState, useEffect } from "react"
 
 // Firebase
 import { collection, getDocs, query, where } from "firebase/firestore"
@@ -14,18 +14,21 @@ export const ItemListContainer = ({ greeting }) => {
 
   useEffect(() => {
     const prodReference = collection(db, "products")
+
     const qry = category
       ? query(prodReference, where("category", "==", category))
       : prodReference
 
-    getDocs(qry).then((resp) => {
-      setProducts(
-        resp.docs.map((doc) => {
-          return { ...doc.data(), id: doc.id }
-        })
-      )
-    })
-    setIsLoading(false)
+    setTimeout(() => {
+      getDocs(qry).then((resp) => {
+        setProducts(
+          resp.docs.map((doc) => {
+            return { ...doc.data(), id: doc.id }
+          })
+        )
+      })
+      setIsLoading(false)
+    }, 2000)
   }, [category])
 
   return (
@@ -33,7 +36,7 @@ export const ItemListContainer = ({ greeting }) => {
       <h1 className="mx-auto text-4xl font-bold"> {greeting} </h1>
       <div className="flex">
         {isLoading ? (
-          <h2 className="text-2xl font-bold">Cargando productos ..</h2>
+          <h2 className="text-2xl font-bold mx-auto">Cargando productos ..</h2>
         ) : (
           <ItemList products={products} />
         )}
